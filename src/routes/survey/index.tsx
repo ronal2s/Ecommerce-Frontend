@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Dialog, DialogTitle, DialogContent, FormControl, DialogActions, Button, ListItemSecondaryActionClassKey, Paper, Grid, CircularProgress } from "@material-ui/core";
+import { Dialog, DialogTitle, DialogContent, FormControl, DialogActions, Button, ListItemSecondaryActionClassKey, Paper, Grid, CircularProgress, IconButton, Icon } from "@material-ui/core";
 import { toast } from "react-toastify";
 import axios from "axios";
 //Custom components
@@ -47,9 +47,34 @@ function HomeView(props: any) {
             _data = data.filter((item: any) => item.Name.toLowerCase().startsWith(value.toLowerCase()))
         } else {
             _data = [...backupData];
-            setInputs({ ...inputs, search: "" });
+            setInputs({ ...inputs, search: "", lowPrice: "", highPrice: "" });
         }
         setData([..._data]);
+    }
+
+    const onFilterPrice = () => {
+        const low: number = parseInt(inputs.lowPrice);
+        const high: number = parseInt(inputs.highPrice);
+        if (low > 0 && high > 0) {
+            let _data = [];
+            if (high < low) {
+                setInputs({ ...inputs, lowPrice: high.toString(), highPrice: low.toString() });
+                _data = data.filter((item: any) => item["Unit Cost"] >= high && item["Unit Cost"] <= low);
+            } else {
+                _data = data.filter((item: any) => item["Unit Cost"] >= low && item["Unit Cost"] <= high);
+            }
+            setData([..._data]);
+        }
+        if (isNaN(low) && high > 0) {
+            let _data = [];
+            _data = data.filter((item: any) => item["Unit Cost"] <= high);
+            setData([..._data]);
+        }
+        if (isNaN(high) && low > 0) {
+            let _data = [];
+            _data = data.filter((item: any) => item["Unit Cost"] >= low);
+            setData([..._data]);
+        }
     }
 
     const handleInputs = (name: string, value: string) => {
@@ -64,13 +89,29 @@ function HomeView(props: any) {
         <React.Fragment>
             {/* <Grid container justify="flex-start" > */}
             <Grid container justify="flex-start" spacing={1} >
-                <Grid item sm={4} >
+                <Grid item sm={4} xs={12} >
                     <Paper style={{ padding: 10 }}>
-                        <TextField fullwidth variant="outlined" label="Filter" value={inputs.search} name="search" onChange={handleInputs} />
+                        <TextField fullwidth variant="outlined" label="Search" value={inputs.search} name="search" onChange={handleInputs} />
+                        <Subtitle>Price</Subtitle>
+                        <Grid container spacing={2}>
+                            <Grid item sm={4}>
+                                <TextField fullwidth variant="outlined" label="Min" value={inputs.lowPrice} name="lowPrice" onChange={handleInputs} />
+                            </Grid>
+                            <Grid item sm={4}>
+                                <TextField fullwidth variant="outlined" label="High" value={inputs.highPrice} name="highPrice" onChange={handleInputs} />
+                            </Grid>
+                            <Grid item sm={2}>
+                                <View centered>
+                                    <IconButton onClick={onFilterPrice} >
+                                        <Icon fontSize="large" >search</Icon>
+                                    </IconButton>
+                                </View>
+                            </Grid>
+                        </Grid>
                         <Button onClick={() => onFilter("")} >Clear filter</Button>
                     </Paper>
                 </Grid>
-                <Grid item sm={8}>
+                <Grid item sm={8} xs={12}>
                     <View centered >
                         {loading && <CircularProgress />}
                     </View>
