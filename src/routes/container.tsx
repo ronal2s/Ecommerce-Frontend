@@ -6,7 +6,7 @@ import {
     BrowserRouter as Router, Switch, Route, Redirect,
 } from "react-router-dom";
 //Screens
-import Survey from "./survey";
+import Home from "./home";
 //Custom components
 import CustomAppBar from '../components/appbar';
 //Utils
@@ -17,7 +17,7 @@ import { GlobalContext } from '../contexts/global';
 //Modals
 import ModalRegister from "../modals/register";
 import ModalLogin from "../modals/login";
-import { deleteStorage, setContext, SetStorage } from '../utils/functions';
+import { deleteStorage, setContext } from '../utils/functions';
 import { Keys } from '../utils/enums';
 
 function App({ t }: any) {
@@ -29,15 +29,14 @@ function App({ t }: any) {
         let buttons = [];
         console.log("Aqui: ", globalContext)
         if (globalContext?.user.logged) {
-            buttons = [({ text: "Log out", onClick: logout })]
+            buttons = [({ text: t("Log out"), onClick: logout })]
         } else {
-            buttons = [{ text: "Login", onClick: () => openModal("login") },
-            { text: "Register", onClick: () => openModal("register") }]
+            buttons = [{ text: t("Log In"), onClick: () => openModal("login") },
+            { text: t("Register"), onClick: () => openModal("register") }]
         }
         setAppbarButtons(buttons as any);
     }, [globalContext]);
 
-    useEffect(() => console.log("Context: ", globalContext))
 
     const logout = () => {
         deleteStorage(Keys.email);
@@ -47,7 +46,6 @@ function App({ t }: any) {
     const openModal = (name: string) => setModals({ ...modals, [name]: true });
     const closeModal = (name: string) => setModals({ ...modals, [name]: false });
 
-    // alert(globalContext?.user.rol)
     return (
         <Router>
             <React.Fragment >
@@ -56,7 +54,7 @@ function App({ t }: any) {
                         <CustomAppBar title="E Commerce" rightButtons={appbarButtons} />
                         <ContentView>
                             <Switch>
-                                <Route path="/" exact component={Survey} />
+                                <Route path="/" exact component={Home} />
                             </Switch>
                         </ContentView>
                     </NavigationView>

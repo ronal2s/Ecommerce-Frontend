@@ -1,9 +1,11 @@
 import React, { useContext, useState } from "react";
 import { Dialog, DialogContent, DialogActions, Button, Grid } from "@material-ui/core";
 import { toast } from "react-toastify";
+import { withNamespaces } from "react-i18next";
 //Custom components
 import TextField from "../components/_textField";
 //Utils
+import i18n from "../utils/i18n";
 import { requestLogin } from "../utils/api";
 import models from "../utils/models";
 import { Title } from "../globalStyles";
@@ -16,9 +18,11 @@ interface IModal {
     onClose: () => void,
 }
 
-function ModalItem(props: IModal) {
+function ModalItem(props: IModal | any) {
     const [form, setForm] = useState({ ...models.login });
     const globalContext = useContext(GlobalContext);
+    const t = (props as any).t;
+
 
     const onEntering = () => {
         setForm({ ...models.login });
@@ -43,18 +47,18 @@ function ModalItem(props: IModal) {
             <DialogContent>
                 <Title>Log In</Title>
                 <Grid container spacing={1}>
-                    <TextField size={6} label="Username" value={form.username} name="username" onChange={handleInputs} />
-                    <TextField size={6} label="Password" value={form.password} name="password" password onChange={handleInputs} />
+                    <TextField size={6} label={t("Username")} value={form.username} name="username" onChange={handleInputs} />
+                    <TextField size={6} label={t("Password")} value={form.password} name="password" password onChange={handleInputs} />
                 </Grid>
 
             </DialogContent>
             <DialogActions>
-                <Button color="secondary" onClick={props.onClose} >Close</Button>
-                <Button color="primary" onClick={onLogin} >Go</Button>
+                <Button color="secondary" onClick={props.onClose} >{t("Close")}</Button>
+                <Button color="primary" onClick={onLogin} >{t("Go")}</Button>
             </DialogActions>
         </Dialog>
 
     )
 }
 
-export default ModalItem;
+export default withNamespaces()(ModalItem);

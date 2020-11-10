@@ -52,7 +52,7 @@ function ModalItem(props: IModal) {
                         <Title>{props.selectedItem.Name}</Title>
                         <Subtitle>{props.selectedItem.Type}</Subtitle>
                         <Price>US ${props.selectedItem['Unit Cost']}</Price>
-                        <Body>{props.selectedItem.Description}</Body>
+                        <Body>{props.selectedItem.Description.substring(0, 300)}...</Body>
                         <Subtitle bold>Materials</Subtitle>
                         <Subtitle>{materials}</Subtitle> <Separator />
                         <Button variant="contained" color="primary" onClick={getMoreInfo} >Get more information</Button>

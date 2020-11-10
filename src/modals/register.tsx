@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Dialog, DialogContent, DialogActions, Button, Grid } from "@material-ui/core";
 import { toast } from "react-toastify";
+import { withNamespaces } from "react-i18next";
 //Custom components
 import TextField from "../components/_textField";
 //Utils
@@ -13,8 +14,10 @@ interface IModal {
     onClose: () => void,
 }
 
-function ModalItem(props: IModal) {
+function ModalItem(props: IModal | any) {
     const [form, setForm] = useState({ ...models.register });
+    const t = (props as any).t;
+
 
     const onEntering = () => {
         setForm({ ...models.register });
@@ -25,9 +28,9 @@ function ModalItem(props: IModal) {
     }
 
     const onRegister = () => {
-        requestRegister(form, (result: any) => {            
-            toast[result.error?"error":"success"](result.msg);
-            if(!result.error) {
+        requestRegister(form, (result: any) => {
+            toast[result.error ? "error" : "success"](result.msg);
+            if (!result.error) {
                 props.onClose();
             }
         })
@@ -35,22 +38,22 @@ function ModalItem(props: IModal) {
     return (
         <Dialog open={props.open} onClose={props.onClose} onEntering={onEntering} maxWidth="sm" fullWidth >
             <DialogContent>
-                <Title>Register</Title>
-                <TextField size={2} label="Username" value={form.username} name="username" onChange={handleInputs} />
+                <Title>{t("Register")}</Title>
+                <TextField size={2} label={t("Username")} value={form.username} name="username" onChange={handleInputs} />
                 <Grid container spacing={1}>
-                    <TextField size={6} label="First Name" value={form.firstName} name="firstName" onChange={handleInputs} />
-                    <TextField size={6} label="Last Name" value={form.lastName} name="lastName" onChange={handleInputs} />
-                    <TextField size={6} label="Email" value={form.email} name="email" onChange={handleInputs} />
-                    <TextField size={6} label="Password" value={form.password} name="password" password onChange={handleInputs} />
+                    <TextField size={6} label={t("First Name")} value={form.firstName} name="firstName" onChange={handleInputs} />
+                    <TextField size={6} label={t("Last Name")} value={form.lastName} name="lastName" onChange={handleInputs} />
+                    <TextField size={6} label={t("Email")} value={form.email} name="email" onChange={handleInputs} />
+                    <TextField size={6} label={t("Password")} value={form.password} name="password" password onChange={handleInputs} />
                 </Grid>
             </DialogContent>
             <DialogActions>
-                <Button color="secondary" onClick={props.onClose} >Close</Button>
-                <Button color="primary" onClick={onRegister} >Register</Button>
+                <Button color="secondary" onClick={props.onClose} >{t("Close")}</Button>
+                <Button color="primary" onClick={onRegister} >{t("Register")}</Button>
             </DialogActions>
         </Dialog>
 
     )
 }
 
-export default ModalItem;
+export default withNamespaces()(ModalItem);
