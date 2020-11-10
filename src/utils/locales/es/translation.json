@@ -14,5 +14,15 @@
     "First Name": "Primer Nombre",
     "Last Name": "Apellidos",
     "Email": "Correo",
-    "Log out": "Cerrar Sesión"
+    "Log out": "Cerrar Sesión",
+    "Get More Information": "Obtener Más Información",
+    "Materials": "Materiales",
+    "Must be logged": "Es necesario iniciar sesión",
+    "User logged successfully": "Ha iniciado sesión correctamente",
+    "Username or password wrong": "Usuario o contraseña incorrectos",
+    "Email already exists": "El correo ya existe",
+    "Username already exists": "El usuario ya existe",
+    "User registred": "Usuario registrado",
+    "Email sent": "Correo enviado",
+    "An error has ocurred": "Ha ocurrido un error"
 }

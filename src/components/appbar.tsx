@@ -30,7 +30,7 @@ function CustomAppBar(props: ICustomAppBar) {
             {props.title}
           </Typography>
           {props.rightButtons.map((button, key) => {
-            return <Button onClick={button.onClick} >{button.text}</Button>
+            return <Button color="inherit" onClick={button.onClick} >{button.text}</Button>
           })}
         </Toolbar>
       </AppBar>

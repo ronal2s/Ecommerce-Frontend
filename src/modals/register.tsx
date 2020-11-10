@@ -29,7 +29,7 @@ function ModalItem(props: IModal | any) {
 
     const onRegister = () => {
         requestRegister(form, (result: any) => {
-            toast[result.error ? "error" : "success"](result.msg);
+            toast[result.error ? "error" : "success"](t(result.msg));
             if (!result.error) {
                 props.onClose();
             }

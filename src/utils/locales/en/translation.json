@@ -14,5 +14,15 @@
     "First Name": "First Name",
     "Last Name": "Last Name",
     "Email": "Email",
-    "Log out": "Log out"
+    "Log out": "Log out",
+    "Get More Information": "Get More Information",
+    "Materials": "Materials",
+    "Must be logged": "Must be logged",
+    "User logged successfully": "User logged successfully",
+    "Username or password wrong": "Username or password wrong",
+    "Email already exists": "Email already exists",
+    "Username already exists": "Username already exists",
+    "User registred": "User registred",
+    "Email sent": "Email sent",
+    "An error has ocurred": "An error has ocurred"
 }

@@ -5,7 +5,6 @@ import { withNamespaces } from "react-i18next";
 //Custom components
 import TextField from "../components/_textField";
 //Utils
-import i18n from "../utils/i18n";
 import { requestLogin } from "../utils/api";
 import models from "../utils/models";
 import { Title } from "../globalStyles";
@@ -34,7 +33,7 @@ function ModalItem(props: IModal | any) {
 
     const onLogin = () => {
         requestLogin(form, (result: any) => {
-            toast[result.error ? "error" : "success"](result.msg);
+            toast[result.error ? "error" : "success"](t(result.msg));
             if (!result.error) {
                 props.onClose();
                 SetStorage(Keys.email, result.email);

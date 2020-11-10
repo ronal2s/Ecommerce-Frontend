@@ -3,8 +3,13 @@ import { Dialog, DialogContent, DialogActions, Button, Grid } from "@material-ui
 //@ts-ignore
 import ImageGallery from 'react-image-gallery';
 //@ts-ignore
-import  'react-image-gallery/styles/css/image-gallery.css';
+import 'react-image-gallery/styles/css/image-gallery.css';
+import { withNamespaces } from "react-i18next";
 import { Body, Price, Separator, Subtitle, Title } from "../../globalStyles";
+import { GetStorage } from "../../utils/functions";
+import { Keys } from "../../utils/enums";
+import { toast } from "react-toastify";
+import { sendEmail } from "../../utils/api";
 
 interface IModal {
     open: boolean,
@@ -12,9 +17,11 @@ interface IModal {
     selectedItem: any
 }
 
-function ModalItem(props: IModal) {
+function ModalItem(props: IModal | any) {
     const [materials, setMaterials] = useState("");
     const [images, setImages] = useState([]);
+    const t = (props as any).t;
+
     const onEntering = () => {
         let materials = "";
         let images: any = [];
@@ -31,7 +38,14 @@ function ModalItem(props: IModal) {
         setImages(images)
     }
     const getMoreInfo = () => {
-
+        const email = GetStorage(Keys.email);
+        if (email) {
+            sendEmail(props.selectedItem, (result: any) => {
+                toast[result.error ? "error" : "success"](t(result.msg));
+            })
+        } else {
+            toast.error(t("Must be logged"))
+        }
     }
 
     return (
@@ -40,12 +54,7 @@ function ModalItem(props: IModal) {
                 {/* <Typography>Soft Dog Pendant</Typography> */}
                 <Grid container spacing={1}>
                     <Grid item sm={6}>
-                    <ImageGallery items={images} />;
-                        {/* <AwesomeSlider cssModule={AwsSliderStyles} mobileTouch >
-                            {props.selectedItem.Picture.map((item: any, key: number) => {
-                                return <div data-src={item.thumbnails.small.url} />
-                            })}
-                        </AwesomeSlider> */}
+                        <ImageGallery items={images} />
                         <Separator size={40} />
                     </Grid>
                     <Grid item sm={6}>
@@ -53,19 +62,19 @@ function ModalItem(props: IModal) {
                         <Subtitle>{props.selectedItem.Type}</Subtitle>
                         <Price>US ${props.selectedItem['Unit Cost']}</Price>
                         <Body>{props.selectedItem.Description.substring(0, 300)}...</Body>
-                        <Subtitle bold>Materials</Subtitle>
+                        <Subtitle bold>{t("Materials")}</Subtitle>
                         <Subtitle>{materials}</Subtitle> <Separator />
-                        <Button variant="contained" color="primary" onClick={getMoreInfo} >Get more information</Button>
+                        <Button variant="contained" color="primary" onClick={getMoreInfo} >{t("Get More Information")}</Button>
                         <Separator size={10} />
                     </Grid>
                 </Grid>
             </DialogContent>
             <DialogActions>
-                <Button color="secondary" onClick={props.onClose} >Close</Button>
+                <Button color="secondary" onClick={props.onClose} >{t("Close")}</Button>
             </DialogActions>
         </Dialog>
 
     )
 }
 
-export default ModalItem;
+export default withNamespaces()(ModalItem);

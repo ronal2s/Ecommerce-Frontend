@@ -122,11 +122,11 @@ function HomeView(props: any) {
                     </View>
                     {data.map((item: any, key) => {
                         return (
-                            <Paper style={{ padding: 10, marginBottom: 10, backgroundColor: item["Units In Store"] ? undefined : "#dcdde1" }} >
+                            <Paper style={{ padding: 10, marginBottom: 10, backgroundColor: item["Units In Store"] ? undefined : COLORS.GRAY }} >
                                 <Grid container spacing={1} justify="flex-start" >
                                     <Grid item sm={3}>
                                         <Image url={item.Picture[0].thumbnails.large.url} width="100%" />
-                                        <View color={item["Units In Store"] ? COLORS.PRIMARY : "#e84118"} marginTop={-5} >
+                                        <View color={item["Units In Store"] ? COLORS.DARK_GRAY : COLORS.RED} marginTop={-5} >
                                             {item["Units In Store"] > 0 && <Subtitle centered color="white">Size {item['Size (WxLxH)']}</Subtitle>}
                                             {!item["Units In Store"] && <Subtitle centered color="white">No stocks available</Subtitle>}
                                         </View>
