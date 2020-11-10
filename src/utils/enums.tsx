@@ -7,19 +7,4 @@ export enum COLORS {
 
 export enum Routes {
     Screen1 = "/",
-    Screen2 = "/Screen2",
-    INVENTORY = "/Inventario",
-    ORDER = "/Orden",
-    PRODUCTS_SUPPLIER = "/ProductosSuplidores",
-    CONSUMPTION = "/Consumos",
-}
-
-export enum Keys {
-    User = "user",
-    Role = "role"
-}
-
-export enum Roles {
-    ADMIN = "ADMIN",
-    USER = "USER"
 }

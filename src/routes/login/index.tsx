@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 //Custom components
 import TextField from "../../components/_textField";
-import { COLORS, Keys } from "../../utils/enums";
+import { COLORS } from "../../utils/enums";
 //Services
 import { SetStorage } from "../../utils/functions";
 import { GlobalContext, IUser } from "../../contexts/global";
@@ -25,15 +25,7 @@ function Login({ t }: any) {
         axios.post("/api/login", { user: form.username, password: form.password })
             .then(result => {
                 console.log("Login data:", result.data)
-                if (result.data.rol) {
-                    // alert("si")
-                    const obj = { user: { logged: true, fullname: result.data.fullname, rol: result.data.rol } }
-                    globalContext?.setContext({ ...obj as any });
-                    SetStorage(Keys.User, form.username);
-                    SetStorage(Keys.Role, result.data.rol);
-                } else {
-                    toast.error(t("Password doesn't match"));
-                }
+              
             })
     }
 
