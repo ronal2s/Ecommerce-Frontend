@@ -8,3 +8,7 @@ export enum COLORS {
 export enum Routes {
     Screen1 = "/",
 }
+
+export enum Keys {
+    email = "email"
+}

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -14,29 +14,57 @@ import { withNamespaces } from 'react-i18next';
 //Custom styles
 import { RowView, NavigationView, ContentView } from '../globalStyles';
 import { GlobalContext } from '../contexts/global';
+//Modals
+import ModalRegister from "../modals/register";
+import ModalLogin from "../modals/login";
+import { deleteStorage, setContext, SetStorage } from '../utils/functions';
+import { Keys } from '../utils/enums';
 
-function App({ t }: any) {    
+function App({ t }: any) {
+    const [modals, setModals] = useState({ register: false, login: false });
+    const [appbarButtons, setAppbarButtons] = useState([]);
     const globalContext = useContext(GlobalContext);
+
+    useEffect(() => {
+        let buttons = [];
+        console.log("Aqui: ", globalContext)
+        if (globalContext?.user.logged) {
+            buttons = [({ text: "Log out", onClick: logout })]
+        } else {
+            buttons = [{ text: "Login", onClick: () => openModal("login") },
+            { text: "Register", onClick: () => openModal("register") }]
+        }
+        setAppbarButtons(buttons as any);
+    }, [globalContext]);
+
+    useEffect(() => console.log("Context: ", globalContext))
+
+    const logout = () => {
+        deleteStorage(Keys.email);
+        setContext(globalContext, { email: "", logged: false });
+    }
+
+    const openModal = (name: string) => setModals({ ...modals, [name]: true });
+    const closeModal = (name: string) => setModals({ ...modals, [name]: false });
 
     // alert(globalContext?.user.rol)
     return (
         <Router>
             <React.Fragment >
-                <RowView >                   
+                <RowView >
                     <NavigationView>
-                        <CustomAppBar title="E Commerce" rightButtons={[
-                            {text: "Login", onClick: () => console.log()},
-                            {text: "Register", onClick: () => console.log()},
-                        ]} />
+                        <CustomAppBar title="E Commerce" rightButtons={appbarButtons} />
                         <ContentView>
                             <Switch>
-                                <Route path="/" exact component={Survey} />  
+                                <Route path="/" exact component={Survey} />
                             </Switch>
                         </ContentView>
                     </NavigationView>
                 </RowView>
                 <ToastContainer />
             </React.Fragment>
+            <ModalRegister open={modals.register} onClose={() => closeModal("register")} />
+            <ModalLogin open={modals.login} onClose={() => closeModal("login")} />
         </Router>
     );
 }

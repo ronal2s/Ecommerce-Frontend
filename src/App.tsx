@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import { GlobalContext, IGlobalContext } from "./contexts/global";
 //Containers
 import Container from "./routes/container";
-import Login from "./routes/login";
+import { Keys } from "./utils/enums";
+import { GetStorage } from "./utils/functions";
 
 
 function App() {
@@ -11,10 +12,15 @@ function App() {
     setContext({ ...context, ...object });
   }
   const [context, setContext] = useState<IGlobalContext>({
-    user: { logged: true, fullname: "", rol: "" },
+    user: { logged: false, email: "" },
     setContext: auxSetContext
   })
-console.log(context.user)
+
+  useEffect(() => {
+    const email = GetStorage(Keys.email);
+    if (email) setContext({ ...context, user: {...context.user, logged: true} })
+  }, [])
+
   return (
     <GlobalContext.Provider value={{ ...context, setContext: auxSetContext }} >
       <Container />

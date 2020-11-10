@@ -1,42 +1,60 @@
-import React from "react";
+import React, { useState } from "react";
 import { Dialog, DialogContent, DialogActions, Button, Grid } from "@material-ui/core";
-import AwesomeSlider from 'react-awesome-slider';
 //@ts-ignore
-import AwsSliderStyles from 'react-awesome-slider/dist/styles.css';
+import ImageGallery from 'react-image-gallery';
+//@ts-ignore
+import  'react-image-gallery/styles/css/image-gallery.css';
 import { Body, Price, Separator, Subtitle, Title } from "../../globalStyles";
 
 interface IModal {
     open: boolean,
     onClose: () => void,
+    selectedItem: any
 }
-const url = "https://images.contentful.com/5de70he6op10/7KotRtmFAvP7OWLTE7PHjH/93bacf07d554c2f56531e16af54a3cd4/FurnitureGateway_03_sectionals.jpg";
 
 function ModalItem(props: IModal) {
-
+    const [materials, setMaterials] = useState("");
+    const [images, setImages] = useState([]);
+    const onEntering = () => {
+        let materials = "";
+        let images: any = [];
+        props.selectedItem["Materials and Finishes"].forEach((item: any) => {
+            materials += `${item}, `;
+        })
+        props.selectedItem.Picture.forEach((item: any) => {
+            images.push({
+                original: item.url,
+                thumbnail: item.thumbnails.small.url
+            })
+        })
+        setMaterials(materials);
+        setImages(images)
+    }
     const getMoreInfo = () => {
 
     }
 
     return (
-        <Dialog open={props.open} onClose={props.onClose} maxWidth="md" fullWidth >
+        <Dialog open={props.open} onClose={props.onClose} onEntering={onEntering} maxWidth="md" fullWidth >
             <DialogContent>
                 {/* <Typography>Soft Dog Pendant</Typography> */}
                 <Grid container spacing={1}>
                     <Grid item sm={6}>
-                        <AwesomeSlider cssModule={AwsSliderStyles} mobileTouch media={[{ source: url }]} />
-                        {/* <div data-src={url} />
-                            <div data-src={url} />
-                            <div data-src={url} />
+                    <ImageGallery items={images} />;
+                        {/* <AwesomeSlider cssModule={AwsSliderStyles} mobileTouch >
+                            {props.selectedItem.Picture.map((item: any, key: number) => {
+                                return <div data-src={item.thumbnails.small.url} />
+                            })}
                         </AwesomeSlider> */}
                         <Separator size={40} />
                     </Grid>
                     <Grid item sm={6}>
-                        <Title>Soft Dog Pendant</Title>
-                        <Subtitle>Lighting</Subtitle>
-                        <Price>US $249</Price>
-                        <Body>Turquoise and ombre brown meld in glossy elliptical base, handcrafted of richly glazed ceramic. Linen shade gently tapers with complementary texture and neutral color.</Body>
+                        <Title>{props.selectedItem.Name}</Title>
+                        <Subtitle>{props.selectedItem.Type}</Subtitle>
+                        <Price>US ${props.selectedItem['Unit Cost']}</Price>
+                        <Body>{props.selectedItem.Description}</Body>
                         <Subtitle bold>Materials</Subtitle>
-                        <Subtitle>Red, White, Matte Black, Shiny Black</Subtitle> <Separator />
+                        <Subtitle>{materials}</Subtitle> <Separator />
                         <Button variant="contained" color="primary" onClick={getMoreInfo} >Get more information</Button>
                         <Separator size={10} />
                     </Grid>

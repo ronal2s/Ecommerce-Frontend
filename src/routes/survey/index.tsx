@@ -21,6 +21,7 @@ function HomeView(props: any) {
     // const [form, setForm] = useState({ name: "Miguel", lastname: "Paulino", phone: "809413265" });
     const [itemModal, setItemModal] = useState(false);
     const [inputs, setInputs] = useState({ search: "", lowPrice: "", highPrice: "" });
+    const [selectedItem, setSelectedItem] = useState(null);
     const [data, setData] = useState([]);
     const [backupData, setBackupData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -37,14 +38,18 @@ function HomeView(props: any) {
         getData();
     }, [])
 
-    const onViewMore = () => setItemModal(true);
+    const onViewMore = (item: any) => {
+        setItemModal(true);
+        setSelectedItem(item)
+    }
 
     const closeViewMore = () => setItemModal(false);
 
-    const onFilter = (value: string) => {
-        let _data = [];
+    const onFilter = async (value: string) => {
+        let _data: never[] = [];
         if (value.length) {
-            _data = data.filter((item: any) => item.Name.toLowerCase().startsWith(value.toLowerCase()))
+            // _data = data.filter((item: any) => item.Name.toLowerCase().startsWith(value.toLowerCase()));
+            _data = await getProducts(value);
         } else {
             _data = [...backupData];
             setInputs({ ...inputs, search: "", lowPrice: "", highPrice: "" });
@@ -117,23 +122,23 @@ function HomeView(props: any) {
                     </View>
                     {data.map((item: any, key) => {
                         return (
-                            <Paper style={{ padding: 10, marginBottom: 10 }} >
+                            <Paper style={{ padding: 10, marginBottom: 10, backgroundColor: item["Units In Store"] ? undefined : "#dcdde1" }} >
                                 <Grid container spacing={1} justify="flex-start" >
                                     <Grid item sm={3}>
                                         <Image url={item.Picture[0].thumbnails.large.url} width="100%" />
-                                        <View color={COLORS.PRIMARY} marginTop={-5} >
-                                            <Subtitle centered color="white">Size {item['Size (WxLxH)']}</Subtitle>
+                                        <View color={item["Units In Store"] ? COLORS.PRIMARY : "#e84118"} marginTop={-5} >
+                                            {item["Units In Store"] > 0 && <Subtitle centered color="white">Size {item['Size (WxLxH)']}</Subtitle>}
+                                            {!item["Units In Store"] && <Subtitle centered color="white">No stocks available</Subtitle>}
                                         </View>
                                     </Grid>
                                     <Grid item sm={8}>
                                         <Content flex alignItems="center" >
                                             <Title clickeable>{item.Name}</Title>
-                                            {/* <Subtitle marginLeft={10} >14 x 19</Subtitle> */}
                                         </Content>
                                         <Subtitle>{item.Type}</Subtitle>
                                         <Price>US ${item['Unit Cost']}</Price>
                                         <Body>{item.Description.substr(0, 200)}...</Body>
-                                        <Button onClick={onViewMore} >View more</Button>
+                                        <Button onClick={() => onViewMore(item)} >View more</Button>
                                     </Grid>
                                 </Grid>
                             </Paper>
@@ -141,7 +146,7 @@ function HomeView(props: any) {
                     })}
                 </Grid>
             </Grid>
-            <ModalItem open={itemModal} onClose={closeViewMore} />
+            {selectedItem && <ModalItem open={itemModal} onClose={closeViewMore} selectedItem={selectedItem} />}
         </React.Fragment>
     )
 }
