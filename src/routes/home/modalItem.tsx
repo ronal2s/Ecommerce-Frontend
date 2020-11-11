@@ -34,6 +34,12 @@ function ModalItem(props: IModal | any) {
                 thumbnail: item.thumbnails.small.url
             })
         })
+        props.selectedItem.Schematic.forEach((item: any) => {
+            images.push({
+                original: item.url,
+                thumbnail: item.thumbnails.small.url
+            })
+        })
         setMaterials(materials);
         setImages(images)
     }
@@ -59,7 +65,7 @@ function ModalItem(props: IModal | any) {
                     </Grid>
                     <Grid item sm={6}>
                         <Title>{props.selectedItem.Name}</Title>
-                        <Subtitle>Size {props.selectedItem["Units In Store"]}</Subtitle>
+                        <Subtitle>Size {props.selectedItem["Size (WxLxH)"]}</Subtitle>
                         <Subtitle>{props.selectedItem.Type}</Subtitle>
                         <Price>US ${props.selectedItem['Unit Cost']}</Price>
                         <Body>{props.selectedItem.Description.substring(0, 300)}...</Body>

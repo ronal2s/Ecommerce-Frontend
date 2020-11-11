@@ -25,7 +25,7 @@ function HomeView(props: any) {
     useEffect(() => {
         const getData = async () => {
             const data = await getProducts();
-            console.log("Data: ", data)
+            console.log("Data: ", data); console.log("Record 0: ", data[0]["Size (WxLxH)"])
             setData(data);
             setBackupData(data);
             setLoading(false);
