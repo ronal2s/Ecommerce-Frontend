@@ -59,6 +59,7 @@ function ModalItem(props: IModal | any) {
                     </Grid>
                     <Grid item sm={6}>
                         <Title>{props.selectedItem.Name}</Title>
+                        <Subtitle>Size {props.selectedItem["Units In Store"]}</Subtitle>
                         <Subtitle>{props.selectedItem.Type}</Subtitle>
                         <Price>US ${props.selectedItem['Unit Cost']}</Price>
                         <Body>{props.selectedItem.Description.substring(0, 300)}...</Body>
