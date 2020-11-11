@@ -1,3 +1,5 @@
+//@ts-ignore
+import passwordHash from 'password-hash';
 import { IGlobalContext, IUser } from "../contexts/global";
 
 export const SetStorage = (key: string, data: string) => {
@@ -31,4 +33,8 @@ export const setContext = (context: IGlobalContext | null, obj: IUser) => {
     if(context?.setContext) {
         context.setContext({...context, user: {...obj}})
     }
+}
+
+export const encodePass = (text: string) => {
+    return passwordHash.generate(text)
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Dialog, DialogContent, DialogActions, Button, Grid } from "@material-ui/core";
 import { toast } from "react-toastify";
 import { withNamespaces } from "react-i18next";
@@ -8,6 +8,9 @@ import TextField from "../components/_textField";
 import { requestRegister } from "../utils/api";
 import models from "../utils/models";
 import { Title } from "../globalStyles";
+import { encodePass, setContext, SetStorage } from "../utils/functions";
+import { Keys } from "../utils/enums";
+import { GlobalContext } from "../contexts/global";
 
 interface IModal {
     open: boolean,
@@ -16,6 +19,7 @@ interface IModal {
 
 function ModalItem(props: IModal | any) {
     const [form, setForm] = useState({ ...models.register });
+    const globalContext = useContext(GlobalContext);
     const t = (props as any).t;
 
 
@@ -26,12 +30,15 @@ function ModalItem(props: IModal | any) {
     const handleInputs = (name: string, value: string) => {
         setForm({ ...form, [name]: value });
     }
-
     const onRegister = () => {
-        requestRegister(form, (result: any) => {
+        const obj = { ...form };
+        obj.password = encodePass(form.password);
+        requestRegister(obj, (result: any) => {
             toast[result.error ? "error" : "success"](t(result.msg));
             if (!result.error) {
                 props.onClose();
+                SetStorage(Keys.email, result.email);
+                setContext(globalContext, { email: result.email, logged: true });
             }
         })
     }

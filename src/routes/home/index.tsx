@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Dialog, DialogTitle, DialogContent, FormControl, DialogActions, Button, ListItemSecondaryActionClassKey, Paper, Grid, CircularProgress, IconButton, Icon } from "@material-ui/core";
-import { toast } from "react-toastify";
-import axios from "axios";
+import { Button, Paper, Grid, CircularProgress, IconButton, Icon } from "@material-ui/core";
 //Custom components
 import TextField from "../../components/_textField";
-import TextPicker from "../../components/_textSelect";
 //Utils
 import { withNamespaces } from "react-i18next";
-import { GetStorage, SetStorage } from "../../utils/functions";
 import { COLORS } from "../../utils/enums";
 import Image from "../../components/image";
 import { Subtitle, Title, Price, Body, Content, View } from "../../globalStyles";
@@ -15,7 +11,6 @@ import { Subtitle, Title, Price, Body, Content, View } from "../../globalStyles"
 import ModalItem from "./modalItem";
 import { getProducts } from "../../utils/api";
 
-const url = "https://images.contentful.com/5de70he6op10/7KotRtmFAvP7OWLTE7PHjH/93bacf07d554c2f56531e16af54a3cd4/FurnitureGateway_03_sectionals.jpg";
 
 function HomeView(props: any) {
     // const [form, setForm] = useState({ name: "Miguel", lastname: "Paulino", phone: "809413265" });
@@ -48,8 +43,8 @@ function HomeView(props: any) {
     const onFilter = async (value: string) => {
         let _data: never[] = [];
         if (value.length) {
-            // _data = data.filter((item: any) => item.Name.toLowerCase().startsWith(value.toLowerCase()));
-            _data = await getProducts(value);
+            _data = data.filter((item: any) => item.Name.toLowerCase().startsWith(value.toLowerCase()));
+            // _data = await getProducts(value); //Fetching data from server
         } else {
             _data = [...backupData];
             setInputs({ ...inputs, search: "", lowPrice: "", highPrice: "" });
